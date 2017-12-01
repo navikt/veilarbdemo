@@ -12,3 +12,5 @@ healthcheck:
   readiness:
     path: veilarbdemo/internal/selftest
     initialDelay: 20
+
+
