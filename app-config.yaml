@@ -12,3 +12,7 @@ healthcheck:
   readiness:
     path: veilarbdemo/internal/selftest
     initialDelay: 20
+fasitResources:
+  used:
+  - alias: loadbalancer:veilarbdemo
+    resourceType: loadbalancerconfig
