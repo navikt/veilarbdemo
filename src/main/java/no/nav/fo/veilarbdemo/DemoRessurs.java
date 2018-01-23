@@ -14,4 +14,10 @@ public class DemoRessurs {
         return "alt ok!";
     }
 
+    @GET
+    @Path("/feil")
+    public String feil() {
+        throw new IllegalStateException("feil!");
+    }
+
 }
