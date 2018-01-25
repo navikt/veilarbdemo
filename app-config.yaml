@@ -19,3 +19,5 @@ fasitResources:
   used:
   - alias: loadbalancer:veilarbdemo
     resourceType: loadbalancerconfig
+  - alias: srvveilarbdemo
+    resourceType: credential
