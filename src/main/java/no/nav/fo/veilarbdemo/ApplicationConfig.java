@@ -1,6 +1,7 @@
 package no.nav.fo.veilarbdemo;
 
 import no.nav.apiapp.ApiApplication;
+import no.nav.apiapp.config.ApiAppConfigurator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -10,7 +11,7 @@ import static no.nav.apiapp.ApiApplication.Sone.FSS;
 @Import({
         DemoRessurs.class
 })
-public class ApplicationConfig implements ApiApplication {
+public class ApplicationConfig implements ApiApplication.NaisApiApplication {
 
     @Override
     public Sone getSone() {
@@ -29,4 +30,10 @@ public class ApplicationConfig implements ApiApplication {
 
     public static final String APPLICATION_NAME = "veilarbdemo";
 
+    @Override
+    public void configure(ApiAppConfigurator apiAppConfigurator) {
+        apiAppConfigurator
+                .samlLogin()
+                .sts();
+    }
 }
