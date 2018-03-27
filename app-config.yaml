@@ -21,3 +21,7 @@ fasitResources:
     resourceType: loadbalancerconfig
   - alias: srvveilarbdemo
     resourceType: credential
+  exposed:
+    - alias: veilarbdemoRS
+      resourceType: restservice
+      path: /veilarbdemo/api
