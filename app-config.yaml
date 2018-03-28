@@ -25,3 +25,6 @@ fasitResources:
     - alias: veilarbdemoRS
       resourceType: restservice
       path: /veilarbdemo/api
+    - alias: veilarbdemoSBS
+      resourceType: restservice
+      path: /veilarbdemo/api
