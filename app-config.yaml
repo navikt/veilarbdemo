@@ -22,6 +22,6 @@ fasitResources:
   - alias: srvveilarbdemo
     resourceType: credential
   exposed:
-    - alias: veilarbdemoRS
-      resourceType: restservice
-      path: /veilarbdemo/api
+  - alias: veilarbdemoSBS
+    resourceType: restservice
+    path: /veilarbdemo/api
