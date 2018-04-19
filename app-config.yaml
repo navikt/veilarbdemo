@@ -21,6 +21,8 @@ fasitResources:
     resourceType: loadbalancerconfig
   - alias: srvveilarbdemo
     resourceType: credential
+  - alias: appdynamics
+    resourceType: applicationproperties
   exposed:
   - alias: veilarbdemoSBS
     resourceType: restservice
