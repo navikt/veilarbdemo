@@ -24,6 +24,6 @@ fasitResources:
   - alias: appdynamics
     resourceType: applicationproperties
   exposed:
-  - alias: veilarbdemoSBS
+  - alias: veilarbdemoAPI
     resourceType: restservice
     path: /veilarbdemo/api
