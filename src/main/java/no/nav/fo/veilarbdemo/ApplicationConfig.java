@@ -10,7 +10,8 @@ import static no.nav.apiapp.ApiApplication.Sone.FSS;
 @Configuration
 @Import({
         DemoRessurs.class,
-        SelfdestructRessurs.class
+        SelfdestructRessurs.class,
+        DebugRessurs.class
 })
 public class ApplicationConfig implements ApiApplication.NaisApiApplication {
 
