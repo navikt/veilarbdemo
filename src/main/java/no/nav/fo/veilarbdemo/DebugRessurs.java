@@ -1,5 +1,6 @@
 package no.nav.fo.veilarbdemo;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.sbl.util.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ import static no.nav.sbl.util.StringUtils.of;
 
 @Component
 @Path("/debug")
+@Slf4j
 public class DebugRessurs {
 
     @GET
@@ -58,7 +60,9 @@ public class DebugRessurs {
             System.getenv().forEach((k, v) -> printer.println(formatKeyValue(k, v)));
 
         }
-        return printer.toString();
+        String s = printer.toString();
+        log.info(s);
+        return s;
     }
 
     private String formatKeyValue(String key, String value) {
