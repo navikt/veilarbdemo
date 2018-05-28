@@ -1,0 +1,24 @@
+# ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
+image: docker.adeo.no:5000/fo/veilarbdemo
+replicas:
+  min: 1
+  max: 2
+  cpuThresholdPercentage: 50
+port: 8080
+webproxy: true
+healthcheck:
+  liveness:
+    path: veilarbdemo/internal/isAlive
+    initialDelay: 60
+  readiness:
+    path: veilarbdemo/internal/selftest
+    initialDelay: 60
+prometheus:
+  enabled: true
+  path: veilarbdemo/internal/metrics
+fasitResources:
+  used:
+  - alias: srvveilarbdemo
+    resourceType: credential
+  - alias: appdynamics
+    resourceType: applicationproperties
