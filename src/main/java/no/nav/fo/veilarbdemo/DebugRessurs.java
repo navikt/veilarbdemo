@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -15,6 +16,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static no.nav.sbl.util.EnvironmentUtils.EnviromentClass.Q;
@@ -28,10 +30,12 @@ import static no.nav.sbl.util.StringUtils.of;
 public class DebugRessurs {
 
     @GET
+    @Path("{path:.*}")
     @Produces(TEXT_PLAIN)
     public String get(
             @Context HttpServletRequest httpServletRequest,
-            @Context UriInfo uriInfo
+            @Context UriInfo uriInfo,
+            @PathParam("path") String path
     ) {
         Printer printer = new Printer();
 
@@ -41,6 +45,7 @@ public class DebugRessurs {
 
             Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
             printer.println(uriInfo.getRequestUri().toString());
+            printer.println(path);
             printer.println("%s %s%s",
                     httpServletRequest.getMethod(),
                     httpServletRequest.getRequestURI(),
@@ -52,6 +57,11 @@ public class DebugRessurs {
                     .stream()
                     .map(s -> formatKeyValue(s, httpServletRequest.getHeader(s)))
                     .forEach(printer::println);
+
+            printer.printSection("Cookies");
+            Stream.of(httpServletRequest.getCookies()).forEach(c ->
+                    printer.println("%s = %s (%s)", c.getName(), c.getValue(), c.toString())
+            );
 
             printer.printSection("System properties");
             System.getProperties().forEach((k, v) -> printer.println(formatKeyValue(k.toString(), v.toString())));
