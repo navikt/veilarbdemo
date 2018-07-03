@@ -18,6 +18,10 @@ public class ApplicationConfig implements ApiApplication.NaisApiApplication {
         return false;
     }
 
+    @Override
+    public String getContextPath() {
+        return "/veilarbdemo";
+    }
 
     @Override
     public void configure(ApiAppConfigurator apiAppConfigurator) {
