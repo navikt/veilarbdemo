@@ -32,11 +32,5 @@ fasitResources:
   - alias: veilarbdemoAPI
     resourceType: restservice
     path: /veilarbdemo/api
-alerts:
-- alert: Feil i selftest
-  expr: selftests_aggregate_result_status{app="veilarbdemo-fss"} > 0
-  for: 3m
-  labels:
-    severity: Warning
-  annotations:
-    action: Undersøk veilarbdemo/internal/selftest for å se hva som er feil
+alertProfiles:
+  - common-java-modules
