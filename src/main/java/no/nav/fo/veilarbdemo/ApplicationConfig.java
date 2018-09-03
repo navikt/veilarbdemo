@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Import;
         DemoRessurs.class,
         SelfdestructRessurs.class,
         DebugRessurs.class,
-        ControlledSelfTestResource.class
+        ControlledSelfTestResource.class,
+        AzureAdHelsesjekk.class
 })
 public class ApplicationConfig implements ApiApplication.NaisApiApplication {
 

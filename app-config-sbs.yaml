@@ -28,5 +28,8 @@ fasitResources:
     resourceType: applicationproperties
   - alias: oidc-stepup # brukes ikke av appen, kun for testing
     resourceType: restservice
+  - alias: aad_b2c_discovery # brukes ikke av appen, kun for testing
+    resourceType: baseurl
+
 alertProfiles:
   - common-java-modules
