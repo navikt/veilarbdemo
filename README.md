@@ -1,6 +1,9 @@
 # Veilarbdemo
 
-Eksempel repo med java oppsett som bygger og kjører på nais.
+Eksempelrepo med Java-oppsett som bygger og kjører på nais. 
+
+Denne applikasjonen brukes også til testing av fellesbiblioteker samt testing av GitHub-integrasjoner fra
+eksterne skytjenester. 
 
 ## Kjøre appen
 ```console
@@ -17,8 +20,12 @@ mvn test
 
 # Henvendelser
 
-Spørsmål knyttet til koden eller prosjektet kan stilles via issues her på github.
+Spørsmål knyttet til koden eller prosjektet kan rettes mot:
+
+* Jan Berge Ommedal, jan.berge.ommedal@nav.no
+* Peder Korsveien, peder.korsveien@nav.no
+* Stephen Ramthun, stephen.ramthun@nav.no
 
 ## For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #pus
+Interne henvendelser kan sendes via Slack i kanalen #pus.
