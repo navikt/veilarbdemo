@@ -1,3 +1,5 @@
+[![Known Vulnerabilities](https://snyk.io/test/github/navikt/veilarbdemo/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/navikt/veilarbdemo?targetFile=pom.xml)
+
 # Veilarbdemo
 
 Eksempelrepo med Java-oppsett som bygger og kjører på nais. 
