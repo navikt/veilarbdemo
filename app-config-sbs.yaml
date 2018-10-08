@@ -7,6 +7,13 @@ replicas:
   cpuThresholdPercentage: 50
 port: 8080
 webproxy: true
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
 healthcheck:
   liveness:
     path: veilarbdemo/internal/isAlive
@@ -17,9 +24,6 @@ healthcheck:
 prometheus:
   enabled: true
   path: veilarbdemo/internal/metrics
-resources:
-  limits:
-    cpu: 3
 fasitResources:
   used:
   - alias: srvveilarbdemo
@@ -31,5 +35,23 @@ fasitResources:
   - alias: aad_b2c_discovery # brukes ikke av appen, kun for testing
     resourceType: baseurl
 
-alertProfiles:
-  - common-java-modules
+
+
+alerts:
+- alert: restart-test-sbs
+  expr: sum(kube_pod_container_status_restarts_total{pod=~"^veilarbdemo.+"}) > 0
+  for: 5m
+  labels:
+    severity: Warning
+  annotations:
+    action: Restart
+
+- alert: memory-sbs
+  expr: (sum(container_memory_working_set_bytes{container_name=~"^veilarbdemo-fss$"}) - sum(kube_pod_container_resource_requests_memory_bytes{container=~"^veilarbdemo-fss$"})) > 50000000
+  for: 30m
+  labels:
+    severity: Warning
+  annotations:
+    action: Restart
+
+

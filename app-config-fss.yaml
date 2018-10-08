@@ -7,6 +7,13 @@ replicas:
   cpuThresholdPercentage: 50
 port: 8080
 webproxy: true
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
 healthcheck:
   liveness:
     path: veilarbdemo/internal/isAlive
@@ -17,9 +24,6 @@ healthcheck:
 prometheus:
   enabled: true
   path: veilarbdemo/internal/metrics
-resources:
-  limits:
-    cpu: 3
 fasitResources:
   used:
   - alias: loadbalancer:veilarbdemo
@@ -36,3 +40,23 @@ fasitResources:
     path: /veilarbdemo/api
 alertProfiles:
   - common-java-modules
+
+
+alerts:
+- alert: restart-test-fss
+  expr: sum(kube_pod_container_status_restarts_total{pod=~"^veilarbdemo-fss.+"}) > 0
+  for: 5m
+  labels:
+    severity: Warning
+  annotations:
+    action: Restart
+
+- alert: memory-fss
+  expr: (sum(container_memory_working_set_bytes{container_name=~"^veilarbdemo-fss$"}) - sum(kube_pod_container_resource_requests_memory_bytes{container=~"^veilarbdemo-fss$"})) > 50000000
+  for: 30m
+  labels:
+    severity: Warning
+  annotations:
+    action: Restart
+
+
