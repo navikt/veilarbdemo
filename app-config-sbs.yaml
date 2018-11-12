@@ -12,7 +12,7 @@ healthcheck:
     path: veilarbdemo/internal/isAlive
     initialDelay: 20
   readiness:
-    path: veilarbdemo/internal/selftest
+    path: veilarbdemo/internal/isReady
     initialDelay: 20
 prometheus:
   enabled: true
@@ -20,6 +20,10 @@ prometheus:
 resources:
   limits:
     cpu: 3
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
 fasitResources:
   used:
   - alias: srvveilarbdemo
