@@ -20,10 +20,10 @@ prometheus:
 resources:
   limits:
     cpu: 3
-    memory: 512Mi
+    memory: 2000Mi
   requests:
     cpu: 200m
-    memory: 256Mi
+    memory: 1500Mi
 fasitResources:
   used:
   - alias: srvveilarbdemo

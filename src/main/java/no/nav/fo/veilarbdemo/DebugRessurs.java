@@ -12,6 +12,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -69,6 +72,13 @@ public class DebugRessurs {
             printer.printSection("Environment");
             System.getenv().forEach((k, v) -> printer.println(formatKeyValue(k, v)));
 
+
+            MemoryMXBean mem = ManagementFactory.getMemoryMXBean();
+            printer.printSection("Memory");
+
+            mem.gc();
+            printer.println("heap: %s", mem.getHeapMemoryUsage());
+            printer.println("non_heap: %s", mem.getNonHeapMemoryUsage());
         }
         String s = printer.toString();
         log.info(s);

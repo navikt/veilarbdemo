@@ -32,12 +32,19 @@ public class SelfdestructRessurs {
     @Path("/oom")
     public String get() {
         while (true) {
-            List<Object> value = new ArrayList<>();
-            map.put(UUID.randomUUID().toString(), value);
-            for (int i = 0; i < 1000; i++) {
-                value.add(new byte[i]);
-            }
+            wasteMemory();
         }
+    }
+
+    @GET
+    @Path("/waste")
+    public String wasteMemory() {
+        List<Object> value = new ArrayList<>();
+        map.put(UUID.randomUUID().toString(), value);
+        for (int i = 0; i < 20_000; i++) {
+            value.add(new byte[i]);
+        }
+        return "wasted memory!";
     }
 
 }
