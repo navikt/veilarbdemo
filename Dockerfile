@@ -6,5 +6,5 @@ ADD / /source
 WORKDIR /source
 RUN mvn package -DskipTests
 
-FROM docker.adeo.no:5000/pus/nais-java-app
+FROM navikt/java:8
 COPY --from=builder /source/target/veilarbdemo /app
