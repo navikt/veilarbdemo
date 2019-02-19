@@ -12,12 +12,7 @@ import org.springframework.context.annotation.Import;
         DebugRessurs.class,
         ControlledSelfTestResource.class
 })
-public class ApplicationConfig implements ApiApplication.NaisApiApplication {
-
-    @Override
-    public boolean brukSTSHelsesjekk() {
-        return false;
-    }
+public class ApplicationConfig implements ApiApplication {
 
     @Override
     public String getContextPath() {
@@ -27,4 +22,5 @@ public class ApplicationConfig implements ApiApplication.NaisApiApplication {
     @Override
     public void configure(ApiAppConfigurator apiAppConfigurator) {
     }
+
 }
