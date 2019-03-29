@@ -2,11 +2,13 @@ package no.nav.fo.veilarbdemo;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.sbl.rest.RestUtils;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import java.net.InetAddress;
 import java.time.Duration;
 
 @Component
@@ -47,4 +49,16 @@ public class DemoRessurs {
         throw new IllegalStateException("feil!");
     }
 
+    @GET
+    @Path("/leader")
+    @SneakyThrows
+    public boolean leader() {
+        String name = RestUtils.withClient(client -> client
+                .target(System.getenv("ELECTOR_PATH"))
+                .request()
+                .get(LeaderResponse.class)
+                .getName()
+        );
+        return InetAddress.getLocalHost().getHostName().equals(name);
+    }
 }
