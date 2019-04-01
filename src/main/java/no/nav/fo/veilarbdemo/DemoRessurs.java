@@ -2,7 +2,9 @@ package no.nav.fo.veilarbdemo;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.json.JsonUtils;
 import no.nav.sbl.rest.RestUtils;
+import org.jose4j.json.JsonUtil;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.GET;
@@ -53,12 +55,15 @@ public class DemoRessurs {
     @Path("/leader")
     @SneakyThrows
     public boolean leader() {
-        String leaderName = RestUtils.withClient(client -> client
+        String entity = RestUtils.withClient(client -> client
                 .target("http://" + System.getenv("ELECTOR_PATH"))
                 .request()
-                .get(LeaderResponse.class)
-                .getName()
+                .get()
+                .readEntity(String.class)
         );
-        return InetAddress.getLocalHost().getHostName().equals(leaderName);
+
+        LeaderResponse leader = JsonUtils.fromJson(entity, LeaderResponse.class);
+
+        return InetAddress.getLocalHost().getHostName().equals(leader.getName());
     }
 }
