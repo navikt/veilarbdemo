@@ -41,5 +41,7 @@ fasitResources:
   - alias: veilarbdemoAPI
     resourceType: restservice
     path: /veilarbdemo/api
+  - alias: loginservice_oidc
+    resourceType: azureoidc
 alertProfiles:
   - common-java-modules
