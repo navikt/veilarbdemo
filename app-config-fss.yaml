@@ -35,8 +35,6 @@ fasitResources:
     resourceType: applicationproperties
   - alias: aad_b2c_discovery # brukes ikke av appen, kun for testing
     resourceType: baseurl
-  - alias: loadbalancer:veilarbdemo-nais-io
-    resourceType: loadbalancerconfig
   exposed:
   - alias: veilarbdemoAPI
     resourceType: restservice
