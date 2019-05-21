@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.json.JsonUtils;
 import no.nav.sbl.rest.RestUtils;
-import org.jose4j.json.JsonUtil;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.GET;
@@ -12,6 +12,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import java.net.InetAddress;
 import java.time.Duration;
+import java.util.UUID;
+
+import static java.util.concurrent.CompletableFuture.runAsync;
 
 @Component
 @Path("/")
@@ -28,6 +31,25 @@ public class DemoRessurs {
     public String ok() {
         return "alt ok!";
     }
+
+    @GET
+    @Path("/job")
+    public String job() {
+        UUID uuid = UUID.randomUUID();
+        String id = Long.toHexString(uuid.getMostSignificantBits()) + Long.toHexString(uuid.getLeastSignificantBits());
+
+        runAsync(
+                () -> {
+                    MDC.put("jobId", id);
+                    log.info("foo");
+                    MDC.remove("jobId");
+                }
+        );
+
+
+        return "job started!";
+    }
+
 
     @GET
     @Path("/slow")
