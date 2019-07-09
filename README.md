@@ -1,4 +1,4 @@
-[![Known Vulnerabilities](https://snyk.io/test/github/navikt/veilarbdemo/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/navikt/veilarbdemo?targetFile=pom.xml)
+[![CircleCI](https://circleci.com/gh/navikt/veilarbdemo/tree/master.svg?style=svg)](https://circleci.com/gh/navikt/veilarbdemo/tree/master)
 
 # Veilarbdemo
 
