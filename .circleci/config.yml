@@ -34,13 +34,15 @@ jobs:
     steps:
       - run:
           name: Oppdater pus-iac
-          command: ./src/update-iac $VERSION
+          command: node src/update-iac $VERSION
 workflows:
   version: 2
   commit:
     jobs:
       - test
       - deploy:
+          requires:
+            - test
           filters:
             branches:
               only: master
