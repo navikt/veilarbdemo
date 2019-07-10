@@ -34,7 +34,7 @@ jobs:
     steps:
       - run:
           name: Oppdater pus-iac
-          command: echo $VERSION
+          command: ./src/update-iac $VERSION
 workflows:
   version: 2
   commit:
