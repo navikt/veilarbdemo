@@ -18,18 +18,18 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       - run: mvn verify
       - run:
-          - name: Sett versjon
-          - command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
+          name: Sett versjon
+          command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
       - run:
-          - name: Tagg med versjon $VERSION
-          - command: echo $VERSION
+          name: Tagg med versjon $VERSION
+          command: echo $VERSION
   deploy:
-    - checkout
     docker:
       - image: navikt/pus-iac
-      steps:
-        name: Oppdater pus-iac
-        command: echo $VERSION
+    steps:
+      - run:
+          name: Oppdater pus-iac
+          command: echo $VERSION
 workflows:
   version: 2
   commit:
