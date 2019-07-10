@@ -1,6 +1,8 @@
-version: 2
+version: 2.1
+orbs:
+  nais: 'navikt/nais-deployment@1.1.1'
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
@@ -15,3 +17,25 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       - run: mvn verify
+      - run:
+        - name: Sett versjon
+        - command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
+      run:
+        - name: Tagg med versjon $VERSION
+        - command: echo $VERSION
+  deploy:
+    - checkout
+    docker:
+      - image: navikt/pus-iac
+      steps:
+        name: Oppdater pus-iac
+        command: echo $VERSION
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - test
+      - deploy:
+          filters:
+            branches:
+              only: master
