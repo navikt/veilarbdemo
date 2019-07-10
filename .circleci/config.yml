@@ -23,6 +23,8 @@ jobs:
       - run:
           name: Tagg med versjon $VERSION
           command: |
+            git config user.email "pusleif@nav.no"
+            git config user.name "pusleif"
             git tag -a $VERSION -m $VERSION HEAD
             git push --tags
   deploy:
