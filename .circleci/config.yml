@@ -20,6 +20,7 @@ jobs:
       - run:
           name: Sett versjon
           command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
+      - add_ssh_keys
       - run:
           name: Tagg med versjon $VERSION
           command: |
