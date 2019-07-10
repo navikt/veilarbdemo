@@ -22,7 +22,9 @@ jobs:
           command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
       - run:
           name: Tagg med versjon $VERSION
-          command: echo $VERSION
+          command: |
+            git tag -a $VERSION -m $VERSION HEAD
+            git push --tags
   deploy:
     docker:
       - image: navikt/pus-iac
