@@ -16,11 +16,22 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       - run: mvn verify
-  build:
-    machine: true
+  build-and-push:
+    docker:
+      - image: circleci/openjdk:8-jdk
     steps:
-      - run: mkdir -p /tmp/workspace
       - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+      - run: mvn dependency:go-offline
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      - run: mvn dependency:go-offline
+      - run: mvn package -B -q -DskipTests
       - add_ssh_keys
       - run:
             name: Sett versjon
@@ -37,16 +48,6 @@ jobs:
           command: |
             docker build -t navikt/veilarbdemo .
             docker tag navikt/veilarbdemo navikt/veilarbdemo:$VERSION
-      - run: docker save -o /tmp/workspace/docker_image.tar navikt/veilarbdemo
-      - persist_to_workspace:
-          root: /tmp/workspace
-          paths: docker_image.tar
-  push:
-    machine: true
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - run: docker load -i /tmp/workspace/docker_image.tar
       - run:
           name: Push docker image
           command: |
@@ -66,22 +67,16 @@ workflows:
   commit:
     jobs:
       - test
-      - build:
-          context: NAIS deployment
-          filters:
-            branches:
-              only: master
-      - push:
+      - build-and-push:
           context: NAIS deployment
           requires:
             - test
-            - build
           filters:
             branches:
               only: master
       - deploy:
           requires:
-            - push
+            - build-and-push
           filters:
             branches:
               only: master
