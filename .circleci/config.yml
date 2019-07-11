@@ -35,12 +35,12 @@ jobs:
       - run:
           name: Bygg og push docker image for versjon $VERSION
           command: |
-          docker build -t navikt/veilarbdemo .
-          docker tag navikt/veilarbdemo navikt/veilarbdemo:$VERSION
-          echo $DOCKER_PASSWORD | docker login --username $DOCKER_LOGIN --password-stdin
-          docker push navikt/veilarbdemo
-          echo "Pushet versjon $VERSION av veilarbdemo"
-          echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/veilarbdemo"
+            docker build -t navikt/veilarbdemo .
+            docker tag navikt/veilarbdemo navikt/veilarbdemo:$VERSION
+            echo $DOCKER_PASSWORD | docker login --username $DOCKER_LOGIN --password-stdin
+            docker push navikt/veilarbdemo
+            echo "Pushet versjon $VERSION av veilarbdemo"
+            echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/veilarbdemo"
 
   deploy:
     docker:
