@@ -10,7 +10,6 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "pom.xml" }}
-            - v1-dependencies-
       - run: mvn dependency:go-offline
       - save_cache:
           paths:
@@ -20,6 +19,7 @@ jobs:
   build:
     machine: true
     steps:
+      - run: mkdir -p /tmp/workspace
       - checkout
       - add_ssh_keys
       - run:
@@ -33,15 +33,22 @@ jobs:
             git tag -a $VERSION -m $VERSION HEAD
             git push --tags
       - run:
-          name: Bygg docker image for versjon "$VERSION"
+          name: Bygg docker image
           command: |
             docker build -t navikt/veilarbdemo .
             docker tag navikt/veilarbdemo navikt/veilarbdemo:$VERSION
+      - run: docker save -o /tmp/workspace/docker_image.tar navikt/veilarbdemo
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths: docker_image.tar
   push:
     machine: true
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: docker load -i /tmp/workspace/docker_image.tar
       - run:
-          name: Push docker image for versjon $VERSION
+          name: Push docker image
           command: |
             echo $DOCKER_PASSWORD | docker login --username $DOCKER_LOGIN --password-stdin
             docker push navikt/veilarbdemo
