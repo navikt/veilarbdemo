@@ -1,10 +1,8 @@
 version: 2.1
-orbs:
-  nais: 'navikt/nais-deployment@1.1.1'
 jobs:
   test:
     docker:
-      - image: navikt/pus-iac:35.20190711.1307
+      - image: navikt/pus-iac
     steps:
       - checkout
       - restore_cache:
@@ -18,8 +16,7 @@ jobs:
       - run: mvn verify
   build-and-deploy:
     docker:
-      - image: navikt/pus-iac:35.20190711.1307
-    working_directory: /
+      - image: navikt/pus-iac
     steps:
       - checkout
       - setup_remote_docker
