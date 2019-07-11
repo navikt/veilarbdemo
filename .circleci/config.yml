@@ -16,7 +16,7 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       - run: mvn verify
-  build-and-push:
+  build-and-deploy:
     docker:
       - image: circleci/openjdk:8-jdk
     steps:
@@ -55,29 +55,18 @@ jobs:
             docker push navikt/veilarbdemo
             echo "Pushet versjon $VERSION av veilarbdemo"
             echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/veilarbdemo"
-  deploy:
-    docker:
-      - image: navikt/pus-iac
-    working_directory: /
-    steps:
       - run:
           name: Oppdater pus-iac
-          command: echo $VERSION
+          command: docker run navikt/pus-iac node ./update-iac $VERSION
 workflows:
   version: 2
   commit:
     jobs:
       - test
-      - build-and-push:
+      - build-and-deploy:
           context: NAIS deployment
           requires:
             - test
-          filters:
-            branches:
-              only: master
-      - deploy:
-          requires:
-            - build-and-push
           filters:
             branches:
               only: master
