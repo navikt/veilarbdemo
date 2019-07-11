@@ -4,7 +4,7 @@ orbs:
 jobs:
   test:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: navikt/pus-iac:35.20190711.1307
     steps:
       - checkout
       - restore_cache:
@@ -18,7 +18,8 @@ jobs:
       - run: mvn verify
   build-and-deploy:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: navikt/pus-iac:35.20190711.1307
+    working_directory: /
     steps:
       - checkout
       - setup_remote_docker
@@ -57,7 +58,7 @@ jobs:
             echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/veilarbdemo"
       - run:
           name: Oppdater pus-iac
-          command: docker run navikt/pus-iac node ./update-iac $VERSION
+          command: node ./update-iac $VERSION
 workflows:
   version: 2
   commit:
