@@ -22,6 +22,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - add_ssh_keys
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "pom.xml" }}
@@ -32,7 +33,6 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
       - run: mvn package -B -q -DskipTests
-      - add_ssh_keys
       - run:
             name: Sett versjon
             command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
@@ -54,15 +54,15 @@ jobs:
             echo $DOCKER_PASSWORD | docker login --username $DOCKER_LOGIN --password-stdin
             docker push navikt/veilarbdemo
             echo "Pushet versjon $VERSION av veilarbdemo"
-            echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/veilarbdemo"ga
+            echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/veilarbdemo"
   deploy:
     docker:
-      - image: navikt/pus-iac:33.20190711.0759
+      - image: navikt/pus-iac
     working_directory: /
     steps:
       - run:
           name: Oppdater pus-iac
-          command: node ./update-iac.js $VERSION
+          command: echo $VERSION
 workflows:
   version: 2
   commit:
