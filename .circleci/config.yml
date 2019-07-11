@@ -30,7 +30,7 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
       - run: mvn dependency:go-offline
-      - run: mvn package -B -q -DskipTests
+      - run: mvn package -B -q
       - run:
             name: Sett versjon
             command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
@@ -60,11 +60,12 @@ workflows:
   version: 2
   commit:
     jobs:
-      - test
+      - test:
+          filters:
+            branches:
+              ignore: master
       - build-and-deploy:
           context: NAIS deployment
-          requires:
-            - test
           filters:
             branches:
               only: master
