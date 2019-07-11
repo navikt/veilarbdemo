@@ -1,10 +1,8 @@
 version: 2.1
-orbs:
-  nais: 'navikt/nais-deployment@1.1.1'
 jobs:
   test:
     docker:
-      - image: navikt/pus-iac:35.20190711.1307
+      - image: navikt/pus-iac
     steps:
       - checkout
       - restore_cache:
@@ -18,8 +16,7 @@ jobs:
       - run: mvn verify
   build-and-deploy:
     docker:
-      - image: navikt/pus-iac:35.20190711.1307
-    working_directory: /
+      - image: navikt/pus-iac
     steps:
       - checkout
       - setup_remote_docker
@@ -38,7 +35,7 @@ jobs:
             name: Sett versjon
             command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
       - run:
-          name: Tagg git-repo
+          name: Tag git repo
           command: |
             git config user.email $GIT_AUTHOR_EMAIL
             git config user.name $GIT_AUTHOR_NAME
@@ -58,7 +55,7 @@ jobs:
             echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/veilarbdemo"
       - run:
           name: Oppdater pus-iac
-          command: node ./update-iac $VERSION
+          command: node /update-iac.js $VERSION
 workflows:
   version: 2
   commit:
