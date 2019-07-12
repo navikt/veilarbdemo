@@ -29,7 +29,6 @@ jobs:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
-      - run: mvn dependency:go-offline
       - run: mvn package -B -q
       - run:
             name: Sett versjon
@@ -60,7 +59,7 @@ workflows:
   version: 2
   commit:
     jobs:
-      - test:
+      - test: 
           filters:
             branches:
               ignore: master
