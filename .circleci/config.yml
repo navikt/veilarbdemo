@@ -64,7 +64,7 @@ workflows:
             branches:
               ignore: master
       - build-and-deploy:
-          context: NAIS deployment
+          context: pus
           filters:
             branches:
               only: master
