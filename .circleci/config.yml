@@ -12,13 +12,13 @@ orbs:
         executor: pus-iac
         steps:
           - checkout
-          - restore_cache:
-              keys:
-                - v1-dependencies-{{ checksum "pom.xml" }}
           - run:
               name: Last ned settings.xml
               command: |
                 curl -o .circleci/settings.xml -L -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3.raw" "api.github.com/repos/navikt/pus-iac/contents/settings.xml"
+          - restore_cache:
+              keys:
+                - v1-dependencies-{{ checksum "pom.xml" }}
           - run: mvn -B -s .circleci/settings.xml dependency:go-offline
           - save_cache:
               paths:
@@ -33,13 +33,13 @@ orbs:
           - checkout
           - setup_remote_docker
           - add_ssh_keys
-          - restore_cache:
-              keys:
-                - v1-dependencies-{{ checksum "pom.xml" }}
           - run:
               name: Last ned settings.xml
               command: |
                 curl -o .circleci/settings.xml -L -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3.raw" "api.github.com/repos/navikt/pus-iac/contents/settings.xml"
+          - restore_cache:
+              keys:
+                - v1-dependencies-{{ checksum "pom.xml" }}
           - run: mvn -B -s .circleci/settings.xml dependency:go-offline
           - save_cache:
               paths:
