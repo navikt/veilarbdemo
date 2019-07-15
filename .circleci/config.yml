@@ -2,84 +2,18 @@ version: 2.1
 description: Orb for produktteam oppfølging
 
 orbs:
-  pus:
-    executors:
-      pus-iac:
-        docker:
-          - image: navikt/pus-iac
-    jobs:
-      test:
-        executor: pus-iac
-        steps:
-          - checkout
-          - run:
-              name: Last ned settings.xml
-              command: |
-                curl -o settings.xml -L -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3.raw" "api.github.com/repos/navikt/pus-iac/contents/settings.xml"
-          - restore_cache:
-              keys:
-                - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
-          - run: mvn -B -s settings.xml dependency:go-offline
-          - save_cache:
-              paths:
-                - ~/.m2
-              key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
-          - run: mvn -B verify
-          - store_test_results:
-              path: target/surefire-reports
-      build-and-deploy:
-        executor: pus-iac
-        steps:
-          - checkout
-          - setup_remote_docker
-          - add_ssh_keys
-          - run:
-              name: Last ned settings.xml
-              command: |
-                curl -o .settings.xml -L -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3.raw" "api.github.com/repos/navikt/pus-iac/contents/settings.xml"
-          - restore_cache:
-              keys:
-                - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
-          - run: mvn -B -s settings.xml dependency:go-offline
-          - save_cache:
-              paths:
-                - ~/.m2
-              key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
-          - run: mvn -B -s .settings.xml package -B -q
-          - store_test_results:
-              path: target/surefire-reports
-          - run:
-              name: Sett versjon
-              command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
-          - run:
-              name: Tag git repo
-              command: node /tag-repo.js $CIRCLE_PROJECT_REPONAME $VERSION
-          - run:
-              name: Bygg docker image
-              command: |
-                docker build -t navikt/$CIRCLE_PROJECT_REPONAME .
-                docker tag navikt/$CIRCLE_PROJECT_REPONAME navikt/$CIRCLE_PROJECT_REPONAME:$VERSION
-          - run:
-              name: Push docker image
-              command: |
-                echo $DOCKER_PASSWORD | docker login --username $DOCKER_LOGIN --password-stdin
-                docker push navikt/$CIRCLE_PROJECT_REPONAME
-                echo "Pushet versjon $VERSION av $CIRCLE_PROJECT_REPONAME"
-                echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/$CIRCLE_PROJECT_REPONAME"
-          - run:
-              name: Oppdater pus-iac
-              command: node /update-iac.js $VERSION
+  pus: navikt/pus-orb@0.0.1
 
 workflows:
   version: 2
   commit:
     jobs:
-      - pus/test:
+      - pus/test-backend:
           context: pus
           filters:
             branches:
               ignore: master
-      - pus/build-and-deploy:
+      - pus/deploy-backend:
           context: pus
           filters:
             branches:
