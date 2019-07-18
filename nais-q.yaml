@@ -1,0 +1,41 @@
+# ref https://raw.githubusercontent.com/nais/naiserator/master/examples/nais-max.yaml
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: veilarbdemo
+  namespace: {{namespace}}
+  labels:
+    team: pus
+spec:
+  image: navikt/veilarbdemo:75.20190711.1418
+  team: pus
+  replicas:
+    min: 2
+    max: 4
+    cpuThresholdPercentage: 50
+  port: 8080
+  ingresses:
+    - https://veilarbdemo-{{namespace}}.nais.preprod.local
+    - https://tjenester-{{namespace}}.nav.no/veilarbdemo
+    - https://www-q.nav.no/veilarbdemo
+    - https://veilarbdemo-q.nav.no
+    - https://veilarbdemo.dev-sbs.nais.io
+  webproxy: true
+  healthcheck:
+    liveness:
+      path: veilarbdemo/internal/isAlive
+      initialDelay: 20
+    readiness:
+      path: veilarbdemo/internal/isReady
+      initialDelay: 20
+  prometheus:
+    enabled: true
+    path: veilarbdemo/internal/metrics
+  resources:
+    limits:
+      cpu: "3"
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
