@@ -19,12 +19,12 @@ orbs:
                 curl -o settings.xml -L -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3.raw" "api.github.com/repos/navikt/pus-pipeline/contents/settings.xml"
           - restore_cache:
               keys:
-                - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
-          - run: mvn -B -s settings.xml dependency:go-offline
+                - v1-dependencies-{{ .Branch }}-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
+          - run: mvn -B -s settings.xml -P circleci dependency:go-offline
           - save_cache:
               paths:
                 - ~/.m2
-              key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
+              key: v1-dependencies-{{ .Branch }}-{{ checksum "pom.xml" }}-{{ checksum "settings.xml" }}
 
       oppdater_npm_cache:
         steps:
@@ -55,9 +55,15 @@ orbs:
 
       sett-versjon-og-tag-repo:
         steps:
+          - run: mkdir -p workspace
           - run:
               name: Sett versjon
               command: echo "export VERSION=$(git rev-list --count HEAD).$(date +'%Y%m%d.%H%M')" >> $BASH_ENV
+          - run: echo $VERSION > workspace/version
+          - persist_to_workspace:
+              root: workspace
+              paths:
+                - version
           - run:
               name: Tag git repo
               command: node /tag-repo.js $CIRCLE_PROJECT_REPONAME $VERSION
@@ -74,16 +80,9 @@ orbs:
         steps:
           - checkout
           - oppdater_mvn_cache
-          - run: mvn -B -s settings.xml package
+          - run: mvn -s settings.xml -P circleci -B package
           - store_test_results:
               path: target/surefire-reports
-
-      bygg-backend-og-push-docker-image:
-        steps:
-          - checkout
-          - add_ssh_keys
-          - bygg-backend
-          - bygg-og-push-docker-image
 
       deploy:
         parameters:
@@ -95,10 +94,13 @@ orbs:
             description: filsti til nais-config (f.eks. `/.nais-q.yaml`)
             default: ./nais-q.yaml
         steps:
+          - attach_workspace:
+              at: /tmp/workspace
           - checkout
           - run:
               name: Deploy app
-              command: node /deploy.js $CIRCLE_PROJECT_REPONAME <<parameters.cluster>> <<parameters.filepath>> $VERSION
+              command: |
+                echo $(ls /tmp/workspace/)
 
     jobs:
 
@@ -107,7 +109,7 @@ orbs:
         steps:
           - checkout
           - oppdater_mvn_cache
-          - run: mvn -B verify
+          - run: mvn -B -s settings.xml -P circleci verify
           - store_test_results:
               path: target/surefire-reports
 
@@ -118,12 +120,6 @@ orbs:
           - oppdater_npm_cache
           - run: npm run lint
           - run: npm run test
-
-      bygg-backend-og-push-docker-image:
-        executor: pus-pipeline
-        steps:
-          - bygg-backend-og-push-docker-image
-
 
       deploy-frontend:
         executor: pus-pipeline
@@ -154,22 +150,44 @@ orbs:
             description: filsti til nais-config (f.eks. `/.nais-q.yaml`)
             default: ./nais-q.yaml
         steps:
-          - bygg-backend-og-push-docker-image
+          - bygg-backend
+          - bygg-og-push-docker-image
           - deploy:
               cluster: <<parameters.cluster>>
               filepath: <<parameters.filepath>>
 
-      bygg-backend-med-frontend-og-push-docker-image:
+      deploy-backend-med-frontend:
         executor: pus-pipeline
+        parameters:
+          cluster:
+            type: string
+            description: cluster det skal deployes til (dev-fss, dev-sbs, prod-sbs eller prod-fss)
+          filepath:
+            type: string
+            description: filsti til nais-config (f.eks. `/.nais-q.yaml`)
+            default: ./nais-q.yaml
         steps:
           - bygg-frontend
-          - bygg-backend-og-push-docker-image
-
-      bygg-og-push-docker-image:
-        executor: pus-pipeline
-        steps:
+          - bygg-backend
           - bygg-og-push-docker-image
+          - deploy:
+              cluster: <<parameters.cluster>>
+              filepath: <<parameters.filepath>>
 
+      deploy:
+        executor: pus-pipeline
+        parameters:
+          cluster:
+            type: string
+            description: cluster det skal deployes til (dev-fss, dev-sbs, prod-sbs eller prod-fss)
+          filepath:
+            type: string
+            description: filsti til nais-config (f.eks. `/.nais-q.yaml`)
+            default: ./nais-q.yaml
+        steps:
+          - deploy:
+              cluster: <<parameters.cluster>>
+              filepath: <<parameters.filepath>>
 
 workflows:
   version: 2
@@ -182,7 +200,16 @@ workflows:
               ignore: master
       - pus/deploy-backend:
           cluster: dev-fss
+          filepath: ./nais-q-fss.yaml
           context: pus
+          filters:
+            branches:
+              only: master
+      - pus/deploy:
+          requires:
+            - pus/deploy-backend
+          cluster: dev-sbs
+          filepath: ./nais-q-sbs.yaml
           filters:
             branches:
               only: master
