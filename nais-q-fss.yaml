@@ -3,7 +3,7 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: veilarbdemo
-  namespace: q0
+  namespace: {{namespace}}
   labels:
     team: pus
 spec:
@@ -15,11 +15,8 @@ spec:
     cpuThresholdPercentage: 50
   port: 8080
   ingresses:
-    - https://veilarbdemo-q0.nais.preprod.local
-    - https://tjenester-q0.nav.no/veilarbdemo
-    - https://www.nav.no/veilarbdemo
-    - https://veilarbdemo-q.nav.no
-    - https://veilarbdemo.dev-sbs.nais.io
+    - https://veilarbdemo-{{namespace}}.nais.preprod.local
+    - https://app-{{namespace}}.adeo.no/veilarbdemo
   webproxy: true
   healthcheck:
     liveness:
@@ -38,7 +35,4 @@ spec:
     requests:
       cpu: 200m
       memory: 256Mi
-  env:
-    name: APPDYNAMICS_CONTROLLER_HOST_NAME
-    value: appdynamics.adeo.no
 

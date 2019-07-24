@@ -15,11 +15,11 @@ spec:
     cpuThresholdPercentage: 50
   port: 8080
   ingresses:
-    - https://veilarbdemo-{{namespace}}.nais.preprod.local
+    - https://veilarbdemo-{{namespace}}.nais.oera-q.local
     - https://tjenester-{{namespace}}.nav.no/veilarbdemo
     - https://www-q.nav.no/veilarbdemo
     - https://veilarbdemo-q.nav.no
-      - https://veilarbdemo.dev-sbs.nais.io
+    - https://veilarbdemo.dev-sbs.nais.io
   webproxy: true
   healthcheck:
     liveness:
