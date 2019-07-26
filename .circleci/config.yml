@@ -85,6 +85,12 @@ orbs:
             default: ./nais-q.yaml
         steps:
           - run:
+              name: Hent siste release fra Github
+              command: |
+                LATEST_RELEASE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/navikt/"$CIRCLE_PROJECT_REPONAME"/releases/latest | jq '.tag_name')
+                echo $LATEST_RELEASE
+                echo "export VERSION=$LATEST_RELEASE" >> $BASH_ENV
+          - run:
               name: Deploy app
               command: |
                 echo "Deployer versjon $VERSION"
@@ -194,6 +200,7 @@ workflows:
             branches:
               only: master
       - pus/deploy:
+          context: pus
           requires:
             - pus/deploy-backend
           cluster: dev-sbs
