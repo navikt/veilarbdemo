@@ -53,10 +53,9 @@ orbs:
           - run:
               name: Push docker image
               command: |
-                echo $DOCKER_PASSWORD | docker login --username $DOCKER_LOGIN --password-stdin
+                echo $GIHUB_TOKEN | docker login docker.pkg.github.com --username pederpus --password-stdin
                 docker push navikt/$CIRCLE_PROJECT_REPONAME
                 echo "Pushet versjon $VERSION av $CIRCLE_PROJECT_REPONAME"
-                echo "https://cloud.docker.com/u/navikt/repository/docker/navikt/$CIRCLE_PROJECT_REPONAME"
 
       bygg-frontend:
         steps:
