@@ -48,13 +48,12 @@ orbs:
           - run:
               name: Bygg docker image
               command: |
-                docker build -t navikt/$CIRCLE_PROJECT_REPONAME .
-                docker tag navikt/$CIRCLE_PROJECT_REPONAME navikt/$CIRCLE_PROJECT_REPONAME:$VERSION
+                docker build -t docker.pkg.github.com/navikt/$CIRCLE_PROJECT_REPONAME/$CIRCLE_PROJECT_REPONAME:$VERSION .
           - run:
               name: Push docker image
               command: |
-                echo $GIHUB_TOKEN | docker login docker.pkg.github.com --username pederpus --password-stdin
-                docker push navikt/$CIRCLE_PROJECT_REPONAME
+                echo $GITHUB_TOKEN | docker login docker.pkg.github.com --username $GITHUB_USERNAME --password-stdin
+                docker push docker.pkg.github.com/navikt/$CIRCLE_PROJECT_REPONAME/$CIRCLE_PROJECT_REPONAME:$VERSION
                 echo "Pushet versjon $VERSION av $CIRCLE_PROJECT_REPONAME"
 
       bygg-frontend:
