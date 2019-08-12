@@ -53,7 +53,7 @@ orbs:
           - run:
               name: Push docker image
               command: |
-                echo $GIHUB_TOKEN | docker login docker.pkg.github.com --username pederpus --password-stdin
+                echo $GITHUB_TOKEN | docker login docker.pkg.github.com --username $GITHUB_USERNAME --password-stdin
                 docker push navikt/$CIRCLE_PROJECT_REPONAME
                 echo "Pushet versjon $VERSION av $CIRCLE_PROJECT_REPONAME"
 
