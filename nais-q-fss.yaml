@@ -35,4 +35,6 @@ spec:
     requests:
       cpu: 200m
       memory: 256Mi
-
+  configMaps:
+    files:
+      - pus
