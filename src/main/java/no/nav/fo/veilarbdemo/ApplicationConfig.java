@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Import;
         DemoRessurs.class,
         SelfdestructRessurs.class,
         DebugRessurs.class,
-        ControlledSelfTestResource.class
+        ControlledSelfTestResource.class,
+        ConfigMapRessurs.class
 })
 public class ApplicationConfig implements ApiApplication {
 
@@ -22,5 +23,4 @@ public class ApplicationConfig implements ApiApplication {
     @Override
     public void configure(ApiAppConfigurator apiAppConfigurator) {
     }
-
 }

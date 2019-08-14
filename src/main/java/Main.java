@@ -1,4 +1,3 @@
-
 import no.nav.apiapp.ApiApp;
 import no.nav.fo.veilarbdemo.ApplicationConfig;
 
