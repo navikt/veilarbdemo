@@ -35,6 +35,9 @@ spec:
     requests:
       cpu: 200m
       memory: 256Mi
-  configMaps:
-    files:
-      - pus
+  env:
+    - APPDYNAMICS_CONTROLLER_HOST_NAME
+    - APPDYNAMICS_CONTROLLER_PORT
+    - APPDYNAMICS_CONTROLLER_SSL_ENABLED
+    - name: FOO
+      value: bar

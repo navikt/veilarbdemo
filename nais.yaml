@@ -38,7 +38,3 @@ spec:
     requests:
       cpu: 200m
       memory: 256Mi
-  env:
-    name: APPDYNAMICS_CONTROLLER_HOST_NAME
-    value: appdynamics.adeo.no
-
