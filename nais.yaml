@@ -4,6 +4,8 @@ kind: "Application"
 metadata:
   name: veilarbdemo
   namespace: q0
+  cluster:
+    - dev-fss
   labels:
     team: pus
 spec:
