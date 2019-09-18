@@ -1,7 +1,6 @@
 package no.nav.fo.veilarbdemo;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.sbl.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,11 +9,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Properties;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 

@@ -36,7 +36,7 @@ public class DemoRessurs {
     @GET
     @Path("/feature")
     public boolean feature(@QueryParam("feature") String feature) {
-        return unleashService.isEnabled(feature);
+        return unleashService.isEnabled("veilarbperson.malform");
     }
 
     @GET

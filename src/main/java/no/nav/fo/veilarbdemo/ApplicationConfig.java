@@ -26,10 +26,13 @@ public class ApplicationConfig implements ApiApplication {
 
     @Bean
     public UnleashService unleashService() {
-        UnleashServiceConfig config = UnleashServiceConfig.builder()
+
+        UnleashServiceConfig config = UnleashServiceConfig
+                .builder()
                 .applicationName("veilarbdemo")
                 .unleashApiUrl("https://unleash.nais.adeo.no/api/")
                 .build();
+
         return new UnleashService(config);
     }
 
