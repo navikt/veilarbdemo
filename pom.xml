@@ -36,6 +36,10 @@
     <dependencies>
         <dependency>
             <groupId>no.nav.common</groupId>
+            <artifactId>feature-toggle</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.common</groupId>
             <artifactId>oidc-security</artifactId>
         </dependency>
         <dependency>
