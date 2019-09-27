@@ -1,5 +1,6 @@
 package no.nav.fo.veilarbdemo;
 
+import io.micrometer.core.instrument.Counter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.json.JsonUtils;
@@ -7,9 +8,9 @@ import no.nav.metrics.MetricsFactory;
 import no.nav.sbl.featuretoggle.unleash.UnleashService;
 import no.nav.sbl.rest.RestUtils;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -25,8 +26,14 @@ import static java.util.concurrent.CompletableFuture.runAsync;
 @Slf4j
 public class DemoRessurs {
 
-    @Autowired
     UnleashService unleashService;
+    Counter counter;
+
+    @Inject
+    public DemoRessurs(UnleashService unleashService) {
+        this.unleashService = unleashService;
+        this.counter = Counter.builder("veilarbdemo_test").register(MetricsFactory.getMeterRegistry());
+    }
 
     @GET
     public String get() {
@@ -43,7 +50,7 @@ public class DemoRessurs {
     @GET
     @Path("/loggmetrikk")
     public String  feature() {
-        MetricsFactory.createEvent("veilarbdemo.test");
+        counter.increment();
         return "Metrikk logget";
     }
 
