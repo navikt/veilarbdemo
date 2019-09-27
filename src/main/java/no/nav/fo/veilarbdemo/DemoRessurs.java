@@ -1,9 +1,11 @@
 package no.nav.fo.veilarbdemo;
 
+import com.codahale.metrics.Metric;
 import io.micrometer.core.instrument.Counter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.json.JsonUtils;
+import no.nav.metrics.Event;
 import no.nav.metrics.MetricsFactory;
 import no.nav.sbl.featuretoggle.unleash.UnleashService;
 import no.nav.sbl.rest.RestUtils;
@@ -50,7 +52,8 @@ public class DemoRessurs {
     @GET
     @Path("/loggmetrikk")
     public String  feature() {
-        counter.increment();
+        Event event = MetricsFactory.createEvent("veilarbdemo.test");
+        event.report();
         return "Metrikk logget";
     }
 
