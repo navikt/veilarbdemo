@@ -3,6 +3,7 @@ package no.nav.fo.veilarbdemo;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.json.JsonUtils;
+import no.nav.metrics.MetricsFactory;
 import no.nav.sbl.featuretoggle.unleash.UnleashService;
 import no.nav.sbl.rest.RestUtils;
 import org.slf4j.MDC;
@@ -36,8 +37,16 @@ public class DemoRessurs {
     @GET
     @Path("/feature")
     public boolean feature(@QueryParam("feature") String feature) {
-        return unleashService.isEnabled("veilarbperson.malform");
+        return unleashService.isEnabled(feature);
     }
+
+    @GET
+    @Path("/loggmetrikk")
+    public String  feature() {
+        MetricsFactory.createEvent("veilarbdemo.test");
+        return "Metrikk logget";
+    }
+
 
     @GET
     @Path("/ok")
