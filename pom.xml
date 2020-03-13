@@ -78,6 +78,11 @@
             <artifactId>types</artifactId>
             <version>${common.version}</version>
         </dependency>
+        <dependency>
+            <groupId>no.nav.common</groupId>
+            <artifactId>aktorregister-klient</artifactId>
+            <version>${common.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
