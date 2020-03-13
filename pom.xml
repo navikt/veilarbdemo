@@ -83,6 +83,11 @@
             <artifactId>aktorregister-klient</artifactId>
             <version>${common.version}</version>
         </dependency>
+        <dependency>
+            <groupId>no.nav.common</groupId>
+            <artifactId>oidc</artifactId>
+            <version>${common.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
