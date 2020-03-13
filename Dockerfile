@@ -1,3 +1,2 @@
-FROM navikt/java:8-appdynamics
-ENV APPD_ENABLED=true
-ADD /target/veilarbdemo /app
+FROM docker.pkg.github.com/navikt/pus-nais-java-app/pus-nais-java-app:java11
+COPY /target/veilarbdemo .

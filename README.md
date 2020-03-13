@@ -16,8 +16,8 @@ mvn clean install
 mvn test
 
 # starte
-# Kjør main-metoden i Main.java
-# For lokal test kjøring kjør MainTest.java
+# Kjør main-metoden i no.nav.fo.veilarbdemo.Main.java
+# For lokal test kjøring kjør no.nav.veilarbdemo.VeilarbdemoTestApp.java
 ```
 
 # Henvendelser
