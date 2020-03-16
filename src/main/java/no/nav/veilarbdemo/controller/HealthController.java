@@ -18,4 +18,9 @@ public class HealthController {
         return "Ready";
     }
 
+    @GetMapping("/selftest")
+    public String selftest() {
+        return "Selftest";
+    }
+
 }
