@@ -1,5 +1,6 @@
 package no.nav.veilarbdemo.controller;
 
+import no.nav.veilarbdemo.config.EnvironmentProperties;
 import no.nav.veilarbdemo.domain.Hello;
 import no.nav.veilarbdemo.service.MetricsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class HelloWorldController {
     private final MetricsService metricsService;
 
     @Autowired
-    public HelloWorldController(MetricsService metricsService) {
+    public HelloWorldController(MetricsService metricsService, EnvironmentProperties environmentProperties) {
         this.metricsService = metricsService;
     }
 

@@ -14,7 +14,7 @@ spec:
     - https://veilarbdemo-{{namespace}}.nais.preprod.local
   prometheus:
     enabled: true
-    path: veilarbdemo/internal/metrics
+    path: veilarbdemo/internal/prometheus
   readiness:
     path: veilarbdemo/internal/isReady
     initialDelay: 30

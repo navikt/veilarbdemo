@@ -7,6 +7,7 @@ import no.nav.common.oidc.auth.OidcAuthenticationFilter;
 import no.nav.common.oidc.auth.OidcAuthenticator;
 import no.nav.common.oidc.auth.OidcAuthenticatorConfig;
 import no.nav.veilarbdemo.utils.SetHeaderFilter;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import static no.nav.common.oidc.Constants.AZURE_AD_ID_TOKEN_COOKIE_NAME;
 import static no.nav.veilarbdemo.utils.HttpFilterHeaders.ALL_HEADERS;
 
 @Configuration
+@EnableConfigurationProperties(EnvironmentProperties.class)
 public class ApplicationConfig {
 
     // TODO: Hent dette fra config som igjen henter fra miljø
