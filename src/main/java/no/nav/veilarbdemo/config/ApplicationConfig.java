@@ -4,10 +4,13 @@ import no.nav.brukerdialog.security.domain.IdentType;
 import no.nav.common.aktorregisterklient.AktorregisterHttpKlient;
 import no.nav.common.aktorregisterklient.AktorregisterKlient;
 import no.nav.common.oidc.auth.OidcAuthenticatorConfig;
+import no.nav.veilarbdemo.utils.SetHeaderFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static no.nav.common.oidc.Constants.AZURE_AD_ID_TOKEN_COOKIE_NAME;
+import static no.nav.veilarbdemo.utils.HttpFilterHeaders.ALL_HEADERS;
 
 @Configuration
 public class ApplicationConfig {
@@ -19,6 +22,22 @@ public class ApplicationConfig {
     public AktorregisterKlient aktorregisterKlient() {
         return new AktorregisterHttpKlient("localhost:1234", APPLICATION_NAME, () -> "");
     }
+
+//    Applikasjoner som blir kalt fra andre domener kan konfigurere opp CORS hvis de trenger
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/api/**")
+//                        .allowCredentials(true)
+//                        .allowedHeaders("Accept", "Accept-language", "Content-Language", "Content-Type")
+//                        .allowedOrigins("*")
+//                        .maxAge(3600)
+//                        .allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS");
+//            }
+//        };
+//    }
 
     private OidcAuthenticatorConfig createAzureAdB2CAuthenticatorConfig() {
         String discoveryUrl = "https://login.microsoftonline.com/966ac572-f5b7-4bbe-aa88-c76419c0f851/.well-known/openid-configuration";
@@ -44,5 +63,16 @@ public class ApplicationConfig {
 //        registration.addUrlPatterns("/*");
 //        return registration;
 //    }
+
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        FilterRegistrationBean<SetHeaderFilter> registration = new FilterRegistrationBean<>();
+        SetHeaderFilter setHeaderFilter = new SetHeaderFilter(ALL_HEADERS);
+
+        registration.setFilter(setHeaderFilter);
+        registration.setOrder(10);
+        registration.addUrlPatterns("/*");
+        return registration;
+    }
 
 }
