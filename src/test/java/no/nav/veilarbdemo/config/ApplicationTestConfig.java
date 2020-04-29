@@ -1,7 +1,6 @@
-package no.nav.veilarbdemo;
+package no.nav.veilarbdemo.config;
 
 import no.nav.common.aktorregisterklient.AktorregisterKlient;
-import no.nav.veilarbdemo.config.EnvironmentProperties;
 import no.nav.veilarbdemo.mock.AktorregisterKlientMock;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

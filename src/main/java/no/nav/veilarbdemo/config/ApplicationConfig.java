@@ -2,7 +2,10 @@ package no.nav.veilarbdemo.config;
 
 import no.nav.common.aktorregisterklient.AktorregisterHttpKlient;
 import no.nav.common.aktorregisterklient.AktorregisterKlient;
+import no.nav.common.aktorregisterklient.CachedAktorregisterKlient;
 import no.nav.common.auth.IdentType;
+import no.nav.common.nais.NaisUtils;
+import no.nav.common.oidc.SystemUserTokenProvider;
 import no.nav.common.oidc.auth.OidcAuthenticationFilter;
 import no.nav.common.oidc.auth.OidcAuthenticator;
 import no.nav.common.oidc.auth.OidcAuthenticatorConfig;
@@ -15,6 +18,7 @@ import org.springframework.context.annotation.Profile;
 
 import java.util.Collections;
 
+import static no.nav.common.nais.NaisUtils.getCredentials;
 import static no.nav.common.oidc.Constants.AZURE_AD_ID_TOKEN_COOKIE_NAME;
 import static no.nav.veilarbdemo.utils.HttpFilterHeaders.ALL_HEADERS;
 
@@ -23,28 +27,30 @@ import static no.nav.veilarbdemo.utils.HttpFilterHeaders.ALL_HEADERS;
 @Profile("!local")
 public class ApplicationConfig {
 
-    public static final String APPLICATION_NAME = "veilarbdemo";
+    public final static String APPLICATION_NAME = "veilarbdemo";
 
-    @Bean
-    public AktorregisterKlient aktorregisterKlient(EnvironmentProperties properties) {
-        return new AktorregisterHttpKlient(properties.getAktorregisterUrl(), APPLICATION_NAME, () -> "TODO: ADD TOKEN");
+    private final String serviceUsername;
+
+    private final String servicePassword;
+
+    public ApplicationConfig() {
+        NaisUtils.Credentials serviceUser = getCredentials("service_user");
+        this.serviceUsername = serviceUser.username;
+        this.servicePassword = serviceUser.password;
     }
 
-//    Applikasjoner som blir kalt fra andre domener kan konfigurere opp CORS hvis de trenger
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/api/**")
-//                        .allowCredentials(true)
-//                        .allowedHeaders("Accept", "Accept-language", "Content-Language", "Content-Type")
-//                        .allowedOrigins("*")
-//                        .maxAge(3600)
-//                        .allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS");
-//            }
-//        };
-//    }
+    @Bean
+    public SystemUserTokenProvider systemUserTokenProvider(EnvironmentProperties properties) {
+        return new SystemUserTokenProvider(properties.getStsDiscoveryUrl(), serviceUsername, servicePassword);
+    }
+
+    @Bean
+    public AktorregisterKlient aktorregisterKlient(EnvironmentProperties properties, SystemUserTokenProvider tokenProvider) {
+        AktorregisterKlient aktorregisterKlient = new AktorregisterHttpKlient(
+                properties.getAktorregisterUrl(), APPLICATION_NAME, tokenProvider::getSystemUserAccessToken
+        );
+        return new CachedAktorregisterKlient(aktorregisterKlient);
+    }
 
     private OidcAuthenticatorConfig createAzureAdAuthenticatorConfig(String discoveryUrl, String clientId) {
         return new OidcAuthenticatorConfig()
@@ -55,7 +61,6 @@ public class ApplicationConfig {
     }
 
     @Bean
-    @Profile("!local")
     public FilterRegistrationBean authenticationRegistrationBean(EnvironmentProperties properties) {
         OidcAuthenticatorConfig azureAdConfig = createAzureAdAuthenticatorConfig(
                 properties.getAzureAdDiscoveryUrl(), properties.getAzureAdClientId()

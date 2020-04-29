@@ -15,4 +15,6 @@ public class EnvironmentProperties {
 
     private String azureAdClientId;
 
+    private String stsDiscoveryUrl;
+
 }
