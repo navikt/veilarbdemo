@@ -16,10 +16,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import java.util.Collections;
+import java.util.List;
 
 import static no.nav.common.nais.NaisUtils.getCredentials;
 import static no.nav.common.oidc.Constants.AZURE_AD_ID_TOKEN_COOKIE_NAME;
+import static no.nav.common.oidc.Constants.OPEN_AM_ID_TOKEN_COOKIE_NAME;
 import static no.nav.veilarbdemo.utils.HttpFilterHeaders.ALL_HEADERS;
 
 @Configuration
@@ -52,23 +53,23 @@ public class ApplicationConfig {
         return new CachedAktorregisterKlient(aktorregisterKlient);
     }
 
-    private OidcAuthenticatorConfig createAzureAdAuthenticatorConfig(String discoveryUrl, String clientId) {
-        return new OidcAuthenticatorConfig()
-                .withDiscoveryUrl(discoveryUrl)
-                .withClientId(clientId)
-                .withIdTokenCookieName(AZURE_AD_ID_TOKEN_COOKIE_NAME)
-                .withIdentType(IdentType.InternBruker);
-    }
-
     @Bean
     public FilterRegistrationBean authenticationRegistrationBean(EnvironmentProperties properties) {
-        OidcAuthenticatorConfig azureAdConfig = createAzureAdAuthenticatorConfig(
-                properties.getAzureAdDiscoveryUrl(), properties.getAzureAdClientId()
-        );
+        OidcAuthenticatorConfig azureAdConfig = new OidcAuthenticatorConfig()
+                .withDiscoveryUrl(properties.getAzureAdDiscoveryUrl())
+                .withClientId(properties.getAzureAdClientId())
+                .withIdTokenCookieName(AZURE_AD_ID_TOKEN_COOKIE_NAME)
+                .withIdentType(IdentType.InternBruker);
+
+        OidcAuthenticatorConfig openAmConfig = new OidcAuthenticatorConfig()
+                .withDiscoveryUrl(properties.getOpenAmDiscoveryUrl())
+                .withClientId(properties.getOpenAmClientId())
+                .withIdTokenCookieName(OPEN_AM_ID_TOKEN_COOKIE_NAME)
+                .withIdentType(IdentType.InternBruker);
 
         FilterRegistrationBean<OidcAuthenticationFilter> registration = new FilterRegistrationBean<>();
         OidcAuthenticationFilter authenticationFilter = new OidcAuthenticationFilter(
-                Collections.singletonList(OidcAuthenticator.fromConfig(azureAdConfig))
+                List.of(OidcAuthenticator.fromConfig(azureAdConfig), OidcAuthenticator.fromConfig(openAmConfig))
         );
 
         registration.setFilter(authenticationFilter);
