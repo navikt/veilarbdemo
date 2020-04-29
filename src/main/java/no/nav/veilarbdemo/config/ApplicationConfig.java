@@ -1,8 +1,8 @@
 package no.nav.veilarbdemo.config;
 
-import no.nav.brukerdialog.security.domain.IdentType;
 import no.nav.common.aktorregisterklient.AktorregisterHttpKlient;
 import no.nav.common.aktorregisterklient.AktorregisterKlient;
+import no.nav.common.auth.IdentType;
 import no.nav.common.oidc.auth.OidcAuthenticationFilter;
 import no.nav.common.oidc.auth.OidcAuthenticator;
 import no.nav.common.oidc.auth.OidcAuthenticatorConfig;
@@ -20,9 +20,9 @@ import static no.nav.veilarbdemo.utils.HttpFilterHeaders.ALL_HEADERS;
 
 @Configuration
 @EnableConfigurationProperties(EnvironmentProperties.class)
+@Profile("!local")
 public class ApplicationConfig {
 
-    // TODO: Hent dette fra config som igjen henter fra miljø
     public static final String APPLICATION_NAME = "veilarbdemo";
 
     @Bean
@@ -63,13 +63,12 @@ public class ApplicationConfig {
 
         FilterRegistrationBean<OidcAuthenticationFilter> registration = new FilterRegistrationBean<>();
         OidcAuthenticationFilter authenticationFilter = new OidcAuthenticationFilter(
-                Collections.singletonList(OidcAuthenticator.fromConfig(azureAdConfig)),
-                Collections.singletonList("/internal/.*")
+                Collections.singletonList(OidcAuthenticator.fromConfig(azureAdConfig))
         );
 
         registration.setFilter(authenticationFilter);
         registration.setOrder(1);
-        registration.addUrlPatterns("/*");
+        registration.addUrlPatterns("/api/.*");
         return registration;
     }
 
