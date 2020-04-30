@@ -1,5 +1,7 @@
 package no.nav.veilarbdemo.config;
 
+import no.nav.common.abac.Pep;
+import no.nav.common.abac.VeilarbPep;
 import no.nav.common.aktorregisterklient.AktorregisterHttpKlient;
 import no.nav.common.aktorregisterklient.AktorregisterKlient;
 import no.nav.common.aktorregisterklient.CachedAktorregisterKlient;
@@ -51,6 +53,11 @@ public class ApplicationConfig {
                 properties.getAktorregisterUrl(), APPLICATION_NAME, tokenProvider::getSystemUserAccessToken
         );
         return new CachedAktorregisterKlient(aktorregisterKlient);
+    }
+
+    @Bean
+    public Pep veilarbPep(EnvironmentProperties properties) {
+        return new VeilarbPep(properties.getAbacUrl(), serviceUsername, servicePassword);
     }
 
     @Bean

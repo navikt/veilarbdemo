@@ -21,4 +21,6 @@ public class EnvironmentProperties {
 
     private String stsDiscoveryUrl;
 
+    private String abacUrl;
+
 }
