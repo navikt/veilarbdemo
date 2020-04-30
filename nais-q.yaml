@@ -32,5 +32,10 @@ spec:
     requests:
       cpu: 500m
       memory: 512Mi
+  vault:
+    enabled: true
+    paths:
+      - kvPath: /serviceuser/data/dev/srvveilarbdemo
+        mountPath: /var/run/secrets/nais.io/service_user
   envFrom:
     - configmap: pto-config
