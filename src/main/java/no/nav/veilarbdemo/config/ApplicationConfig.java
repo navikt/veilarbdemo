@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Profile;
 import java.util.List;
 
 import static no.nav.common.nais.NaisUtils.getCredentials;
-import static no.nav.common.oidc.Constants.AZURE_AD_ID_TOKEN_COOKIE_NAME;
 import static no.nav.common.oidc.Constants.OPEN_AM_ID_TOKEN_COOKIE_NAME;
 import static no.nav.veilarbdemo.utils.HttpFilterHeaders.ALL_HEADERS;
 
@@ -62,11 +61,11 @@ public class ApplicationConfig {
 
     @Bean
     public FilterRegistrationBean authenticationRegistrationBean(EnvironmentProperties properties) {
-        OidcAuthenticatorConfig azureAdConfig = new OidcAuthenticatorConfig()
-                .withDiscoveryUrl(properties.getAzureAdDiscoveryUrl())
-                .withClientId(properties.getAzureAdClientId())
-                .withIdTokenCookieName(AZURE_AD_ID_TOKEN_COOKIE_NAME)
-                .withIdentType(IdentType.InternBruker);
+//        OidcAuthenticatorConfig azureAdConfig = new OidcAuthenticatorConfig()
+//                .withDiscoveryUrl(properties.getAzureAdDiscoveryUrl())
+//                .withClientId(properties.getAzureAdClientId())
+//                .withIdTokenCookieName(AZURE_AD_ID_TOKEN_COOKIE_NAME)
+//                .withIdentType(IdentType.InternBruker);
 
         OidcAuthenticatorConfig openAmConfig = new OidcAuthenticatorConfig()
                 .withDiscoveryUrl(properties.getOpenAmDiscoveryUrl())
@@ -76,7 +75,7 @@ public class ApplicationConfig {
 
         FilterRegistrationBean<OidcAuthenticationFilter> registration = new FilterRegistrationBean<>();
         OidcAuthenticationFilter authenticationFilter = new OidcAuthenticationFilter(
-                List.of(OidcAuthenticator.fromConfig(azureAdConfig), OidcAuthenticator.fromConfig(openAmConfig))
+                List.of(OidcAuthenticator.fromConfig(openAmConfig))
         );
 
         registration.setFilter(authenticationFilter);
