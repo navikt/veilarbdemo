@@ -6,6 +6,8 @@ import no.nav.common.health.HealthChecker;
 import no.nav.common.health.selftest.SelfTestCheck;
 import no.nav.common.health.selftest.SelfTestStatus;
 import no.nav.common.health.selftest.SelftTestCheckResult;
+import no.nav.common.health.selftest.SelftestHtmlGenerator;
+import no.nav.common.utils.EnvironmentUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static no.nav.common.health.selftest.SelfTestUtils.aggregateStatus;
@@ -52,10 +55,9 @@ public class InternalController {
     @GetMapping("/selftest")
     public ResponseEntity selftest() {
         List<SelftTestCheckResult> checkResults = checkAll(selftestChecks);
-        // TODO: SelftestHtmlGenerator.generate tryner fordi HTMLen ikke blir lest fra readResourceFile
-        // String html = SelftestHtmlGenerator.generate(checkResults, EnvironmentUtils.resolveHostName(), LocalDateTime.now());
+        String html = SelftestHtmlGenerator.generate(checkResults, EnvironmentUtils.resolveHostName(), LocalDateTime.now());
         int status = aggregateStatus(checkResults) == SelfTestStatus.ERROR ? 500 : 200;
-        return ResponseEntity.status(status).body("TODO");
+        return ResponseEntity.status(status).body(html);
     }
 
 }

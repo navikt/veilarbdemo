@@ -19,7 +19,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <common.version>2.2020.04.29_15.01-f57e2ec5a3e8</common.version>
+        <common.version>2.2020.05.04_16.53-c811501117fb</common.version>
         <springfox.version>2.9.2</springfox.version>
     </properties>
 
@@ -99,7 +99,12 @@
         </dependency>
         <dependency>
             <groupId>no.nav.common</groupId>
-            <artifactId>oidc</artifactId>
+            <artifactId>sts</artifactId>
+            <version>${common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.common</groupId>
+            <artifactId>auth</artifactId>
             <version>${common.version}</version>
         </dependency>
         <dependency>

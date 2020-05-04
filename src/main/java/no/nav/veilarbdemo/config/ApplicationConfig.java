@@ -5,12 +5,13 @@ import no.nav.common.abac.VeilarbPep;
 import no.nav.common.aktorregisterklient.AktorregisterHttpKlient;
 import no.nav.common.aktorregisterklient.AktorregisterKlient;
 import no.nav.common.aktorregisterklient.CachedAktorregisterKlient;
-import no.nav.common.auth.IdentType;
+import no.nav.common.auth.oidc.filter.OidcAuthenticationFilter;
+import no.nav.common.auth.oidc.filter.OidcAuthenticator;
+import no.nav.common.auth.oidc.filter.OidcAuthenticatorConfig;
+import no.nav.common.auth.subject.IdentType;
 import no.nav.common.nais.NaisUtils;
-import no.nav.common.oidc.SystemUserTokenProvider;
-import no.nav.common.oidc.auth.OidcAuthenticationFilter;
-import no.nav.common.oidc.auth.OidcAuthenticator;
-import no.nav.common.oidc.auth.OidcAuthenticatorConfig;
+import no.nav.common.sts.NaisSystemUserTokenProvider;
+import no.nav.common.sts.SystemUserTokenProvider;
 import no.nav.veilarbdemo.utils.SetHeaderFilter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -20,8 +21,8 @@ import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 
+import static no.nav.common.auth.Constants.OPEN_AM_ID_TOKEN_COOKIE_NAME;
 import static no.nav.common.nais.NaisUtils.getCredentials;
-import static no.nav.common.oidc.Constants.OPEN_AM_ID_TOKEN_COOKIE_NAME;
 import static no.nav.veilarbdemo.utils.HttpFilterHeaders.ALL_HEADERS;
 
 @Configuration
@@ -43,13 +44,13 @@ public class ApplicationConfig {
 
     @Bean
     public SystemUserTokenProvider systemUserTokenProvider(EnvironmentProperties properties) {
-        return new SystemUserTokenProvider(properties.getStsDiscoveryUrl(), serviceUsername, servicePassword);
+        return new NaisSystemUserTokenProvider(properties.getStsDiscoveryUrl(), serviceUsername, servicePassword);
     }
 
     @Bean
     public AktorregisterKlient aktorregisterKlient(EnvironmentProperties properties, SystemUserTokenProvider tokenProvider) {
         AktorregisterKlient aktorregisterKlient = new AktorregisterHttpKlient(
-                properties.getAktorregisterUrl(), APPLICATION_NAME, tokenProvider::getSystemUserAccessToken
+                properties.getAktorregisterUrl(), APPLICATION_NAME, tokenProvider::getSystemUserToken
         );
         return new CachedAktorregisterKlient(aktorregisterKlient);
     }

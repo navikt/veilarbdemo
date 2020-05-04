@@ -37,5 +37,7 @@ spec:
     paths:
       - kvPath: /serviceuser/data/dev/srvveilarbdemo
         mountPath: /var/run/secrets/nais.io/service_user
+      - kvPath: /kv/preprod/fss/veilarbdemo/{{namespace}}
+        mountPath: /var/run/secrets/nais.io/vault
   envFrom:
     - configmap: pto-config
