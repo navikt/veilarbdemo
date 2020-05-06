@@ -22,12 +22,12 @@ public class AktorregisterDemoService {
 
     public String hentFnr(String aktorId) {
         tilgangService.sjekkLesetilgangMedInnloggetBruker(AbacPersonId.aktorId(aktorId));
-        return aktorregisterKlient.hentFnr(aktorId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return aktorregisterKlient.hentFnr(aktorId);
     }
 
     public String hentAktorId(String fnr) {
         tilgangService.sjekkLesetilgangMedInnloggetBruker(AbacPersonId.fnr(fnr));
-        return aktorregisterKlient.hentAktorId(fnr).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return aktorregisterKlient.hentAktorId(fnr);
     }
 
 }

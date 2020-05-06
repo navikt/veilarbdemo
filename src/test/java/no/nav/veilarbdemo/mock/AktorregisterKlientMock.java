@@ -4,18 +4,17 @@ import no.nav.common.aktorregisterklient.AktorregisterKlient;
 import no.nav.common.aktorregisterklient.IdentOppslag;
 
 import java.util.List;
-import java.util.Optional;
 
 public class AktorregisterKlientMock implements AktorregisterKlient {
 
     @Override
-    public Optional<String> hentFnr(String s) {
-        return Optional.of("123456789");
+    public String hentFnr(String s) {
+        return "123456789";
     }
 
     @Override
-    public Optional<String> hentAktorId(String s) {
-        return Optional.empty();
+    public String hentAktorId(String s) {
+        return "00123456789";
     }
 
     @Override
