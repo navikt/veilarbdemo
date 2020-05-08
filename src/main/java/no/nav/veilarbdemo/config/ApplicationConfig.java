@@ -5,6 +5,9 @@ import no.nav.common.abac.VeilarbPep;
 import no.nav.common.aktorregisterklient.AktorregisterHttpKlient;
 import no.nav.common.aktorregisterklient.AktorregisterKlient;
 import no.nav.common.aktorregisterklient.CachedAktorregisterKlient;
+import no.nav.common.metrics.InfluxClient;
+import no.nav.common.metrics.MetricsClient;
+import no.nav.common.metrics.SensuConfig;
 import no.nav.common.nais.NaisUtils;
 import no.nav.common.sts.NaisSystemUserTokenProvider;
 import no.nav.common.sts.SystemUserTokenProvider;
@@ -30,6 +33,11 @@ public class ApplicationConfig {
         NaisUtils.Credentials serviceUser = getCredentials("service_user");
         this.serviceUsername = serviceUser.username;
         this.servicePassword = serviceUser.password;
+    }
+
+    @Bean
+    public MetricsClient influxMetricsClient() {
+        return new InfluxClient(SensuConfig.resolveNaisConfig());
     }
 
     @Bean
