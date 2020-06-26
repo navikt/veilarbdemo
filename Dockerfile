@@ -1,2 +1,2 @@
-FROM docker.pkg.github.com/navikt/pus-nais-java-app/pus-nais-java-app:java11
+FROM navikt/java:12
 COPY /target/veilarbdemo.jar app.jar
