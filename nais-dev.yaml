@@ -14,12 +14,12 @@ spec:
     - https://veilarbdemo.dev.intern.nav.no
   prometheus:
     enabled: true
-    path: veilarbdemo/internal/prometheus
+    path: /internal/prometheus
   readiness:
-    path: veilarbdemo/internal/isReady
+    path: /internal/health/readiness
     initialDelay: 30
   liveness:
-    path: veilarbdemo/internal/isAlive
+    path: /internal/health/liveness
     initialDelay: 30
   replicas:
     min: 1
