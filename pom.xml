@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.5.RELEASE</version>
+        <version>2.5.2</version>
         <relativePath/>
     </parent>
 
@@ -18,8 +18,8 @@
     <description>Demo backend</description>
 
     <properties>
-        <java.version>11</java.version>
-        <common.version>2.2020.05.08_10.33-f8c53a193c7b</common.version>
+        <java.version>17</java.version>
+        <common.version>2.2022.01.21_08.02-cd96965058ef</common.version>
         <springfox.version>2.9.2</springfox.version>
     </properties>
 
@@ -89,11 +89,6 @@
         </dependency>
         <dependency>
             <groupId>no.nav.common</groupId>
-            <artifactId>aktorregister-klient</artifactId>
-            <version>${common.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.common</groupId>
             <artifactId>sts</artifactId>
             <version>${common.version}</version>
         </dependency>
@@ -122,11 +117,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>

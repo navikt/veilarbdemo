@@ -2,16 +2,16 @@ kind: Application
 apiVersion: nais.io/v1alpha1
 metadata:
   name: veilarbdemo
-  namespace: {{namespace}}
+  namespace: pto
   labels:
-    team: pus
+    team: pto
   cluster: dev-fss
 spec:
   image: docker.pkg.github.com/navikt/veilarbdemo/veilarbdemo:{{version}}
   port: 8080
   webproxy: true
   ingresses:
-    - https://veilarbdemo-{{namespace}}.nais.preprod.local
+    - https://veilarbdemo.dev.intern.nav.no
   prometheus:
     enabled: true
     path: veilarbdemo/internal/prometheus
@@ -32,12 +32,3 @@ spec:
     requests:
       cpu: 500m
       memory: 512Mi
-  vault:
-    enabled: true
-    paths:
-      - kvPath: /serviceuser/data/dev/srvveilarbdemo
-        mountPath: /var/run/secrets/nais.io/service_user
-      - kvPath: /kv/preprod/fss/veilarbdemo/{{namespace}}
-        mountPath: /var/run/secrets/nais.io/vault
-  envFrom:
-    - configmap: pto-config
