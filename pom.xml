@@ -21,6 +21,8 @@
         <java.version>17</java.version>
         <common.version>2.2022.10.28_07.53-25ffb4a980b5</common.version>
         <springfox.version>3.0.0</springfox.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <build>
@@ -28,6 +30,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
         </plugins>
         <finalName>veilarbdemo</finalName>
