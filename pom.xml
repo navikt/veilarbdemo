@@ -21,6 +21,7 @@
         <java.version>17</java.version>
         <common.version>2.2022.10.28_07.53-25ffb4a980b5</common.version>
         <springfox.version>3.0.0</springfox.version>
+        <caffeine.version>2.9.3</caffeine.version>
     </properties>
 
     <build>
@@ -32,6 +33,18 @@
         </plugins>
         <finalName>veilarbdemo</finalName>
     </build>
+
+    <repositories>
+        <!-- For io.confluent Jars not in maven central -->
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -46,7 +59,30 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>guava</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>jcache</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>simulator</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
