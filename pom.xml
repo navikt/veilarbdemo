@@ -22,6 +22,7 @@
         <common.version>2.2022.10.28_07.53-25ffb4a980b5</common.version>
         <springfox.version>3.0.0</springfox.version>
         <caffeine.version>2.9.3</caffeine.version>
+        <confluent.version>6.1.1</confluent.version>
     </properties>
 
     <build>
@@ -68,16 +69,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-            <version>21.3.0.0</version>
-        </dependency>
 
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.common</groupId>
+            <artifactId>kafka</artifactId>
+            <version>${common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>${confluent.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
